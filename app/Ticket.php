@@ -16,4 +16,14 @@ class Ticket extends Model
         $this->save();
         return true;
     }
+
+    public function updateTicket($data)
+    {
+        $ticket = $this->find($data['id']);
+        $ticket->user_id = auth()->user()->id;
+        $ticket->title = $data['title'];
+        $ticket->description = $data['description'];
+        $ticket->save();
+        return true;
+    }
 }
