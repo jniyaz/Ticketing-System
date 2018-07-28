@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Ticket;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TicketsController extends Controller
 {
     public function index()
     {
-        $tickets = Ticket::where('user_id', auth()->user()->id)->get();
+        $tickets = Ticket::all();
 
         return view('user.home')->with('tickets', $tickets);
     }
@@ -39,11 +40,11 @@ class TicketsController extends Controller
 
     public function edit(int $id)
     {
-        $ticket = Ticket::where('user_id', auth()->user()->id)
-                        ->where('id', $id)
-                        ->first();
-        
-        return view('user.edit', compact('ticket', 'id'));
+        if(Auth::check()){
+            $ticket = Ticket::where('id', $id)->first();
+
+            return view('user.edit', compact('ticket', 'id'));
+        }
     }
 
     public function update(Request $request, $id)
